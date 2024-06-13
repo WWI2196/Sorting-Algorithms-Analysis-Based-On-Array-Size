@@ -4,6 +4,8 @@
 #include <ctime>
 #include <iomanip>
 #include <cstring>
+#include <string>
+
 using namespace std;
 using namespace std::chrono;
 
@@ -29,6 +31,8 @@ void sortSelection(int* numberArray, int arraySize, int sortType, long long& com
 void sortingAverageValues(const int* NVALUES, const int NVALUETYPES, int NUMBEROFRUNS);
 
 void printTableHeader() {// Print the table header
+
+    cout << '|' << string(91, '-') << '|' << endl;
     
     cout << '|' << left << setw(NAMECOLUMNWIDTH) << "Sorting Algorithm" << '|' << setw(NCOLUMNWIDTH) << "n=100" << '|' << setw(NCOLUMNWIDTH) << "n=200" 
         << '|' << setw(NCOLUMNWIDTH) << "n=400"<< '|' << setw(NCOLUMNWIDTH) << "n=800" << '|' << setw(NCOLUMNWIDTH) << "n=1000" << '|' << setw(NCOLUMNWIDTH) << "n=2000" << '|' << endl;
@@ -37,39 +41,40 @@ void printTableHeader() {// Print the table header
         << '|' << string(NCOLUMNWIDTH, '-') << '|' << string(NCOLUMNWIDTH, '-') << '|' << string(NCOLUMNWIDTH, '-') << '|' << endl;
 }
 
-void printAverageComparisonsTable(string sortTypeName,const int* NVALUES, long long comparisons[],const int NVALUETYPES) {
+void printAverageComparisonsTable(string sortTypeName,const int* NVALUES, long long comparisons[],const int NVALUETYPES) { // print the average number of comparisons table
     cout << '|' << left << setw(NAMECOLUMNWIDTH) << sortTypeName;
 
     for (int i = 0; i < NVALUETYPES; i++) {
-        cout << '|' << setw(NCOLUMNWIDTH) << comparisons[i];
+        cout << '|' << setw(NCOLUMNWIDTH) << comparisons[i]; // for each value of n print the average number of comparisons
+    }
+    cout << '|' << endl;
+
+}
+
+void printAverageRunTimeTable(string sortTypeName, const int* NVALUES, double runTimes[],const int NVALUETYPES) { // print the average running time table
+    cout << '|' << left << setw(NAMECOLUMNWIDTH) << sortTypeName;
+
+    for (int i = 0; i < NVALUETYPES; i++) {
+        cout << '|' << setw(NCOLUMNWIDTH) << runTimes[i]; // for each value of n print the average running time
     }
     cout << '|' << endl;
 }
 
-void printAverageRunTimeTable(string sortTypeName, const int* NVALUES, double runTimes[],const int NVALUETYPES) {
-    cout << '|' << left << setw(NAMECOLUMNWIDTH) << sortTypeName;
-
-    for (int i = 0; i < NVALUETYPES; i++) {
-        cout << '|' << setw(NCOLUMNWIDTH) << runTimes[i];
-    }
-    cout << '|' << endl;
-}
-
-void swap(int* a, int* b) {
+void swap(int* a, int* b) { // swap two number positions
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-void generateRandomArray(int* numberArray, int size) {
-    srand(time(0));
+void generateRandomArray(int* numberArray, int size) { // generate random numbers for the array
+    srand(time(0)); // seed the random number generator to get different numbers each time
 
     for (int i = 0; i < size; i++) {
-        numberArray[i] = (rand() % (size * 10)) + 1; // Random number between 1 and 10*size
+        numberArray[i] = (rand() % (size * 10)) + 1; // generate random numbers between 1 and 10*size and add to the number array
     }
 }
 
-void selectionSort(int numberArray[], int size, double& runTime, long long& comparisons) {
+void selectionSort(int numberArray[], int size, double& runTime, long long& comparisons) { //function to sort the array using selection sort
     auto start = high_resolution_clock::now();
 
     for (int i = 0; i < size - 1; i++) {
@@ -83,7 +88,7 @@ void selectionSort(int numberArray[], int size, double& runTime, long long& comp
     runTime = duration_cast<chrono::duration<double, milli>>(end - start).count();
 }
 
-void insertionSort(int numberArray[], int size, double& runTime, long long& comparisons) {
+void insertionSort(int numberArray[], int size, double& runTime, long long& comparisons) { //function to sort the array using insertion sort
     auto start = high_resolution_clock::now();
 
     for (int i = 1; i < size; i++) {
@@ -101,7 +106,7 @@ void insertionSort(int numberArray[], int size, double& runTime, long long& comp
     runTime = duration_cast<chrono::duration<double, milli>>(end - start).count();
 }
 
-void merge(int numberArray[], int l, int m, int r, long long& comparisons) {
+void merge(int numberArray[], int l, int m, int r, long long& comparisons) { // Merge function for merge sort
     int i, j;
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -153,7 +158,7 @@ void merge(int numberArray[], int l, int m, int r, long long& comparisons) {
     delete[] R;  // Deallocate memory for R
 }
 
-void mergeSort(int numberArray[], int l, int r, long long& comparisons) {
+void mergeSort(int numberArray[], int l, int r, long long& comparisons) { // function for merge sort
     if (l < r) {
         comparisons++;
         int m = l + (r - l) / 2;
@@ -165,7 +170,7 @@ void mergeSort(int numberArray[], int l, int r, long long& comparisons) {
     }
 }
 
-int partition(int numberArray[], int low, int high, long long& comparisons) {
+int partition(int numberArray[], int low, int high, long long& comparisons) { // function for partitioning the array for quick sort
     int pivot = numberArray[high];
     int i = (low - 1);
 
@@ -183,7 +188,7 @@ int partition(int numberArray[], int low, int high, long long& comparisons) {
     return (i + 1);
 }
 
-void quickSort(int numberArray[], int low, int high, long long& comparisons) {
+void quickSort(int numberArray[], int low, int high, long long& comparisons) { // function for quick sort
     if (low < high) {
         comparisons++;
         int pivot = partition(numberArray, low, high, comparisons);
@@ -192,7 +197,7 @@ void quickSort(int numberArray[], int low, int high, long long& comparisons) {
     }
 }
 
-void countingSort_R(int numberArray[], int size, double& runTime, long long& comparisons) {
+void countingSort_R(int numberArray[], int size, double& runTime, long long& comparisons) { // function for counting sort
     auto start = high_resolution_clock::now();
 
     int* index_array = new int[size]();  // Initialize with zero
@@ -228,9 +233,9 @@ void countingSort_R(int numberArray[], int size, double& runTime, long long& com
 
 }
 
-void sortSelection(int* numberArray, int arraySize, int sortType, long long& comparisons, double& runTime) {
-    int* copyArray = new int[arraySize];
-    copy(numberArray, numberArray + arraySize, copyArray);
+void sortSelection(int* numberArray, int arraySize, int sortType, long long& comparisons, double& runTime) { // function to select the sorting algorithm based on the user's choice
+    int* copyArray = new int[arraySize]; // array to store the copy of the original array
+    copy(numberArray, numberArray + arraySize, copyArray); // copy the original number array to the copy array
 
     switch (sortType) {
     case 1:
@@ -266,21 +271,25 @@ void sortSelection(int* numberArray, int arraySize, int sortType, long long& com
 }
 
 void sortingAverageValues(const int* NVALUES, const int NVALUETYPES, int NUMBEROFRUNS) {
-    long long comparisons[5][6] = { 0 };
-    double runTimes[5][6] = { 0 };
+    long long comparisons[5][6] = { 0 }; // 2D array to store the average number of comparisons for each sorting process and n value
+    double runTimes[5][6] = { 0 }; // 2D array to store the average running time for each sorting process and n value
 
-    for (int i = 0; i < NVALUETYPES; i++) {
-        int* numberArray = new int[NVALUES[i]];
+    for (int i = 0; i < NVALUETYPES; i++) { // for each type of n value
+        int* numberArray = new int[NVALUES[i]]; // craete an array of given n value
 
-        for (int run = 0; run < NUMBEROFRUNS; run++) {
-            generateRandomArray(numberArray, NVALUES[i]);
+        for (int run = 0; run < NUMBEROFRUNS; run++) { // for each run 
+            generateRandomArray(numberArray, NVALUES[i]); // generate random numbers for the array 
 
-            for (int sortType = 1; sortType <= 5; sortType++) {
-                long long comparison_temp = 0;
-                double runTime_temp = 0;
-                sortSelection(numberArray, NVALUES[i], sortType, comparison_temp, runTime_temp);
-                comparisons[sortType - 1][i] += comparison_temp;
-                runTimes[sortType - 1][i] += runTime_temp;
+            for (int sortType = 1; sortType <= 5; sortType++) { // for each sorting type
+                long long* comparison_temp = new long long(0); // temporary variable to store the number of comparisons
+                double* runTime_temp = new double(0); // temporary variable to store the running time
+
+                sortSelection(numberArray, NVALUES[i], sortType, *comparison_temp, *runTime_temp); // generate the values for the temporary variables
+                comparisons[sortType - 1][i] += *comparison_temp; // add the temporary values to the 2D array for each run 
+                runTimes[sortType - 1][i] += *runTime_temp; // add the temporary values to the 2D array for each run
+
+                delete comparison_temp;
+                delete runTime_temp;
             }
         }
         delete[] numberArray;
@@ -288,29 +297,31 @@ void sortingAverageValues(const int* NVALUES, const int NVALUETYPES, int NUMBERO
 
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < NVALUETYPES; j++) {
-            comparisons[i][j] /= NUMBEROFRUNS;
-            runTimes[i][j] /= NUMBEROFRUNS;
+            comparisons[i][j] /= NUMBEROFRUNS; // calculate the average number of comparisons for each sorting process and n value by dinding the cell value by number of runs
+            runTimes[i][j] /= NUMBEROFRUNS; // calculate the average running time for each sorting process and n value by dinding the cell value by number of runs
         }
     }
 
     cout << "\tAverage number of comparisons for sorting arrays of n integers" << endl;
-    printTableHeader();
-    for (int i = 0; i < 5; i++) {
-        printAverageComparisonsTable(SORTINGNAMES[i], NVALUES, comparisons[i], NVALUETYPES);
+    printTableHeader(); // print the table header
+    // print the table for the average number of comparisons
+    for (int i = 0; i < 5; i++) { 
+        printAverageComparisonsTable(SORTINGNAMES[i], NVALUES, comparisons[i], NVALUETYPES); // print the average comparisons valus for each sorting types and n values
     }
     cout << endl;
 
     cout << "\tAverage running time(in ms) for sorting arrays of n integers" << endl;
-    printTableHeader();
+    printTableHeader(); // print the table header
+    // print the table for the average running time
     for (int i = 0; i < 5; i++) {
-        printAverageRunTimeTable(SORTINGNAMES[i], NVALUES, runTimes[i], NVALUETYPES);
+        printAverageRunTimeTable(SORTINGNAMES[i], NVALUES, runTimes[i], NVALUETYPES); // print the average running time for each sorting types and n values
     }
     cout << endl;
 }
 
 int main() {
     
-    sortingAverageValues(NVALUES, NVALUETYPES, NUMBEROFRUNS);
+    sortingAverageValues(NVALUES, NVALUETYPES, NUMBEROFRUNS); // call the function to calculate the average number of comparisons and running time for each sorting process and n value
 
     return 0;
 }

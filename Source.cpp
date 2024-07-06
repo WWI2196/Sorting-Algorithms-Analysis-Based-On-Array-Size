@@ -277,7 +277,7 @@ void sortingAverageValues(const int* NVALUES, const int NVALUETYPES, int NUMBERO
     double runTimes[5][6] = { 0 }; // 2D array to store the average running time for each sorting process and n value
 
     for (int i = 0; i < NVALUETYPES; i++) { // for each type of n value
-        int* numberArray = new int[NVALUES[i]]; // craete an array of given n value
+        int* numberArray = new int[NVALUES[i]]; // create an array of given n value
 
         for (int run = 0; run < NUMBEROFRUNS; run++) { // for each run 
             generateRandomArray(numberArray, NVALUES[i]); // generate random numbers for the array 
